@@ -125,23 +125,30 @@ pub struct SigningConfig<'k, A: Algorithm> {
     algorithm: A,
     private_key: &'k PrivateKey,
     key_id: String,
-    signed_headers: &'static [&'static str],
+    signed_headers: Vec<&'static str>,
     /// Other fields such as `created`, and `expires`
     pub other: Vec<(String, String)>,
 }
 
 impl<'k, A: Algorithm> SigningConfig<'k, A> {
     /// Configure for `algorithm` with `private_key` identified by `key_id`
-    pub fn new(algorithm: A, private_key: &'k PrivateKey, key_id: impl Into<String>) -> Self {
+    pub fn new(algorithm: A, private_key: &'k PrivateKey, key_id: impl Into<String>, has_body: bool) -> Self {
+        let signed_headers = match has_body {
+            true => vec![
+                "(request-target)",
+                "host", "date",
+                "digest", "content-type",
+            ],
+            false => vec![
+                "(request-target)",
+                "host", "date",
+            ],
+        };
         SigningConfig {
             algorithm,
             private_key,
             key_id: key_id.into(),
-            signed_headers: &[
-                "(request-target)",
-                "host", "date",
-                "digest", "content-type"
-            ],
+            signed_headers,
             other: vec![],
         }
     }
