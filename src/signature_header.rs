@@ -10,7 +10,7 @@ use crate::Error;
 
 /// A parsed representation of the `Signature:` header
 #[derive(Debug, Clone)]
-pub(crate) struct SignatureHeader<'a> {
+pub struct SignatureHeader<'a> {
     pub key_id: Option<&'a str>,
     pub algorithm: &'a str,
     pub headers: Vec<&'a str>,
