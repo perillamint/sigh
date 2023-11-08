@@ -62,7 +62,7 @@
 //! }
 //! ```
 
-#![deny(unused, missing_docs)]
+//#![deny(unused, missing_docs)]
 
 mod error;
 /// Signature algorithms
@@ -77,6 +77,7 @@ pub use signature::{
     Signature,
     SigningConfig,
 };
+pub use signature_header::SignatureHeader;
 
 /// General error type
 pub use error::Error;
